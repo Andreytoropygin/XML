@@ -2,6 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { SemestersService } from './semesters.service';
 import { CreateSemesterDto } from './dto/create-semester.dto';
 import { UpdateSemesterDto } from './dto/update-semester.dto';
+import { Semester } from './entities/semester.entity';
+import { Query } from '@nestjs/common';
 
 @Controller('semesters')
 export class SemestersController {
@@ -13,8 +15,8 @@ export class SemestersController {
   }
 
   @Get()
-  findAll() {
-    return this.semestersService.findAll();
+  findAll(@Query('title') title?: string): Semester[] {
+    return this.semestersService.findAll(title);
   }
 
   @Get(':id')

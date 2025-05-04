@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "src": "https://cache3.youla.io/files/images/720_720_out/5a/8a/5a8a9ad665bcf13b5c762e94.jpg",
+        "title": "2 семестр",
+        "text": "Механика и термодинамика",
+        "course": "1"
+    },
+    {
+        "id": 2,
+        "src": "https://staticgeopop.akamaized.net/wp-content/uploads/sites/32/2021/09/iStock-157642745.jpg",
+        "title": "3 семестр",
+        "text": "Электромагнетизм",
+        "course": "2"
+    },
+    {
+        "id": 3,
+        "src": "https://i.pinimg.com/736x/14/ae/66/14ae66e8d1ad5b8f342404c2cb175e62.jpg",
+        "title": "4 семестр",
+        "text": "Квантовая физика",
+        "course": "2"
+    }
+]

@@ -1,26 +1,51 @@
 import { Injectable } from '@nestjs/common';
 import { CreateSemesterDto } from './dto/create-semester.dto';
 import { UpdateSemesterDto } from './dto/update-semester.dto';
+import { Semester } from './entities/semester.entity';
+import { FileService } from 'src/file.service';
 
 @Injectable()
 export class SemestersService {
+  constructor(private fileService: FileService<Semester[]>) {}
+
   create(createSemesterDto: CreateSemesterDto) {
-    return 'This action adds a new semester';
+    const semesters = this.fileService.read();
+
+    const semester = { ...createSemesterDto, id: semesters.length + 1};
+    this.fileService.add(semester)
   }
 
-  findAll() {
-    return `This action returns all semesters`;
+  findAll(title?: string): Semester[] {
+    const semesters = this.fileService.read();
+
+    return title ?
+      semesters.filter(sem =>
+        sem.title.toLowerCase().includes(title.toLowerCase())
+      ) : 
+      semesters;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} semester`;
+  findOne(id: number): Semester | null {
+    const semesters = this.fileService.read();
+
+    return semesters.find(sem => sem.id == id) ?? null;
   }
 
   update(id: number, updateSemesterDto: UpdateSemesterDto) {
-    return `This action updates a #${id} semester`;
+    const semesters = this.fileService.read();
+
+    const updatedSemesters = semesters.map(sem =>
+      sem.id == id ? { ...sem, ...updateSemesterDto} : sem
+    );
+    this.fileService.write(updatedSemesters);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} semester`;
+    const semesters = this.fileService.read();
+
+    const updatedSemesters = semesters.filter(sem =>
+      sem.id != id
+    );
+    this.fileService.write(updatedSemesters);
   }
 }
