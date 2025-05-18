@@ -3,6 +3,8 @@ import { SemesterPage } from "../semester-page/index.js";
 import { FilterButtonsComponent } from "../../components/filter-buttons/index.js";
 import { AddButtonComponent} from "../../components/add-button/index.js";
 import { DeleteButtonComponent} from "../../components/delete-button/index.js";
+import {ajax} from "../../modules/ajax.js";
+import {semestersUrls} from "../../modules/semesterUrls.js";
 
 
 export class MainPage {
@@ -33,8 +35,23 @@ export class MainPage {
         ];
     }
 
+    // getData() {
+    //     return this.data
+    // }
+
     getData() {
-        return this.data
+        ajax.get(semestersUrls.getSemesters(), (data) => {
+            this.renderData(data);
+        })
+    }
+
+    renderData(items) {
+        items.forEach((item) => {
+            const gallery = this.pageRoot.querySelector('.gallery');
+            gallery.innerHTML = ''; // Очистка галереи
+            const semesterCard = new SemesterCardComponent(gallery)
+            semesterCard.render(item, this.onClickCard.bind(this))
+        })
     }
 
     setData(data) {
@@ -63,13 +80,13 @@ export class MainPage {
         this.parent.innerHTML = ''; // Очистка текущего содержимого
         this.parent.insertAdjacentHTML('beforeend', this.getHTML());
         
-        const data = this.getData();
+        this.getData();
 
-        const filters = ["Все", "1 курс", "2 курс"];
-        const filterButtons = new FilterButtonsComponent(this.pageRoot.querySelector('.filter-buttons'));
-        filterButtons.render(filters, this.onFilterChange.bind(this));
+        // const filters = ["Все", "1 курс", "2 курс"];
+        // const filterButtons = new FilterButtonsComponent(this.pageRoot.querySelector('.filter-buttons'));
+        // filterButtons.render(filters, this.onFilterChange.bind(this));
 
-        this.showFilteredSemesters(data, "all");
+        // this.showFilteredSemesters(data, "all");
 
         const addButton = new AddButtonComponent(this.pageRoot.querySelector('.add-delete-buttons'));
         const deleteButton = new DeleteButtonComponent(this.pageRoot.querySelector('.add-delete-buttons'));
