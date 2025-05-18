@@ -15,11 +15,11 @@ class SemestersUrls {
         return `${this.baseUrl}/semesters`;
     }
 
-    removeSemesterById() {
+    removeSemesterById(id) {
         return `${this.baseUrl}/semesters/${id}`;
     }
 
-    updateSemesterById() {
+    updateSemesterById(id) {
         return `${this.baseUrl}/semesters/${id}`;
     }
 }

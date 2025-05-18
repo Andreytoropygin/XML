@@ -11,8 +11,7 @@ export class AccordionComponent {
         this.anagramsInput = this.anagramsInput.bind(this);
     }
 
-    getHTML(data, semId) {
-        let sem = data.find(sem => sem.id == semId);
+    getHTML(sem) {
         const example = [0, 1, false, 2, undefined, '', 3, null];
         const ex_words = ["a", "b", "ab", "bc", "abc", "abcd"];
         const ex_str = "abc";
@@ -144,9 +143,9 @@ export class AccordionComponent {
         document.getElementById("anagrams").innerHTML = concatenate(erase(anagram(array)), "<br>");
     }
 
-    render(data, semId) {
+    render(data) {
         this.parent.innerHTML = '';
-        this.parent.insertAdjacentHTML('beforeend', this.getHTML(data, semId));
+        this.parent.insertAdjacentHTML('beforeend', this.getHTML(data));
         document.getElementById("erase-input").addEventListener("change", this.eraseInput);
         document.getElementById("words-input").addEventListener("change", this.wordsInput);
         document.getElementById("str-input").addEventListener("change", this.strInput);
