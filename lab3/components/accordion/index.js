@@ -1,14 +1,14 @@
-import { concatenate, erase, countPrefixes, anagram } from "../../func.js";
+import { concatenateLectures, eraseLectures, countLecturesPrefixes, anagramLectures } from "../../func.js";
 
 export class AccordionComponent {
     constructor(parent) {
         this.parent = parent;
         this.words = [];
 
-        this.eraseInput = this.eraseInput.bind(this);
-        this.wordsInput = this.wordsInput.bind(this);
-        this.strInput = this.strInput.bind(this);
-        this.anagramsInput = this.anagramsInput.bind(this);
+        this.eraseLecturesInput = this.eraseLecturesInput.bind(this);
+        this.prefixLecturesInput = this.prefixLecturesInput.bind(this);
+        this.prefixInput = this.prefixInput.bind(this);
+        this.anagramsLecturesInput = this.anagramsLecturesInput.bind(this);
     }
 
     getHTML(data, semId) {
@@ -27,7 +27,7 @@ export class AccordionComponent {
                     </h2>
                     <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne">
                         <div class="accordion-body">
-                            ${concatenate(erase(sem.lectures), "<br>")}
+                            ${concatenateLectures(eraseLectures(sem.lectures), "<br>")}
                         </div>
                     </div>
                 </div>
@@ -39,7 +39,7 @@ export class AccordionComponent {
                     </h2>
                     <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo">
                         <div class="accordion-body">
-                            ${concatenate(erase(sem.seminars), "<br>")}
+                            ${concatenateLectures(eraseLectures(sem.seminars), "<br>")}
                         </div>
                     </div>
                 </div>
@@ -51,7 +51,7 @@ export class AccordionComponent {
                     </h2>
                     <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree">
                         <div class="accordion-body">
-                            ${concatenate(erase(sem.labWorks), "<br>")}
+                            ${concatenateLectures(eraseLectures(sem.labWorks), "<br>")}
                         </div>
                     </div>
                 </div>
@@ -65,12 +65,12 @@ export class AccordionComponent {
                         <div class="accordion-body">
                             <strong>Введите массив:</strong>
                             <div>
-                                <input id="erase-input" type="text"/>
+                                <input id="eraseLectures-input" type="text"/>
                             </div>
                             <strong>Очищенный массив:</strong>
                             <div id="erased-array"></div>
                             <strong>Пример:</strong>
-                            <label>исходный массив: ${concatenate(example, ", ")}; очищенный массив: ${concatenate(erase(example), ", ")}.</label>
+                            <label>исходный массив: ${concatenateLectures(example, ", ")}; очищенный массив: ${concatenateLectures(eraseLectures(example), ", ")}.</label>
                         </div>
                     </div>
                 </div>
@@ -92,7 +92,7 @@ export class AccordionComponent {
                             </div>
                             <strong>Префиксов: </strong><label id="prefix-count"></label><br>
                             <strong>Пример:</strong>
-                            <label>массив: ${concatenate(ex_words, ", ")}; строка: ${ex_str}; префиксов: ${countPrefixes(ex_words, ex_str)}</label>
+                            <label>массив: ${concatenateLectures(ex_words, ", ")}; строка: ${ex_str}; префиксов: ${countLecturesPrefixes(ex_words, ex_str)}</label>
                         </div>
                     </div>
                 </div>
@@ -112,9 +112,9 @@ export class AccordionComponent {
                             <div id="anagrams"></div>
 
                             <strong>Пример:</strong><br>
-                            <label>Массив: ${concatenate(anagrams, ", ")}</label><br>
+                            <label>Массив: ${concatenateLectures(anagrams, ", ")}</label><br>
                             <label>Анаграммы:</label>
-                            <div>${concatenate(erase(anagram(anagrams)), "<br>")}</div>
+                            <div>${concatenateLectures(eraseLectures(anagramLectures(anagrams)), "<br>")}</div>
                         </div>
                     </div>
                 </div>
@@ -122,34 +122,34 @@ export class AccordionComponent {
         `
     }
 
-    eraseInput(event) {
-        document.getElementById("erased-array").innerHTML = concatenate(erase(event.target.value
+    eraseLecturesInput(event) {
+        document.getElementById("erased-array").innerHTML = concatenateLectures(eraseLectures(event.target.value
             .split(', ').join(',').split(',')), ', ');
     }
 
-    wordsInput(event) {
+    prefixLecturesInput(event) {
         this.words = event.target.value.split(', ').join(',').split(',');
     }
 
-    strInput(event) {
+    prefixInput(event) {
         let count = 0
         if (this.words.length > 0) {
-            count = countPrefixes(this.words, event.target.value)
+            count = countLecturesPrefixes(this.words, event.target.value)
         }
         document.getElementById("prefix-count").innerHTML = count;
     }
 
-    anagramsInput(event) {
+    anagramsLecturesInput(event) {
         const array = event.target.value.split(', ').join(',').split(',');
-        document.getElementById("anagrams").innerHTML = concatenate(erase(anagram(array)), "<br>");
+        document.getElementById("anagrams").innerHTML = concatenateLectures(eraseLectures(anagramLectures(array)), "<br>");
     }
 
     render(data, semId) {
         this.parent.innerHTML = '';
         this.parent.insertAdjacentHTML('beforeend', this.getHTML(data, semId));
-        document.getElementById("erase-input").addEventListener("change", this.eraseInput);
-        document.getElementById("words-input").addEventListener("change", this.wordsInput);
-        document.getElementById("str-input").addEventListener("change", this.strInput);
-        document.getElementById("anagrams-input").addEventListener("change", this.anagramsInput);
+        document.getElementById("eraseLectures-input").addEventListener("change", this.eraseLecturesInput);
+        document.getElementById("words-input").addEventListener("change", this.prefixLecturesInput);
+        document.getElementById("str-input").addEventListener("change", this.prefixInput);
+        document.getElementById("anagrams-input").addEventListener("change", this.anagramsLecturesInput);
     }
 }
