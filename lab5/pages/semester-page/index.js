@@ -1,7 +1,6 @@
 import { BackButtonComponent } from "../../components/back-button/index.js";
 import { AccordionComponent } from "../../components/accordion/index.js";
 import { MainPage } from "../main/index.js";
-import { ajax } from "../../modules/ajax.js";
 import { semestersUrls } from "../../modules/semesterUrls.js";
 
 export class SemesterPage {
@@ -24,20 +23,41 @@ export class SemesterPage {
         `;
     }
 
-    render() {
-        ajax.get(semestersUrls.getSemesterById(this.semId), (data) => {
-            this.parent.innerHTML = ''; // Очистка текущего содержимого
+    async render() {
+        try {
+            const response = await fetch(semestersUrls.getSemesterById(this.semId));
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            // Очистка и рендеринг
+            this.parent.innerHTML = '';
             this.parent.insertAdjacentHTML('beforeend', this.getHTML(data.title));
-
+    
+            // Поиск элементов после добавления в DOM
             const accordionContainer = this.pageRoot.querySelector('.accordion-container');
             const accordion = new AccordionComponent(accordionContainer);
             accordion.render(data);
             
-            // Добавляем кнопку "Назад"
+            // Добавление кнопки "Назад"
             const backButtonContainer = this.pageRoot.querySelector('.buttons-container');
             const backButton = new BackButtonComponent(backButtonContainer);
             backButton.render(this.goBack.bind(this));
-        });
+            
+        } catch (error) {
+            console.error('Ошибка при загрузке данных семестра:', error);
+            // Можно добавить обработку ошибки (например, показать сообщение пользователю)
+            this.parent.innerHTML = '<p class="error">Не удалось загрузить данные семестра</p>';
+            
+            // Добавляем кнопку "Назад" даже при ошибке
+            const backButtonContainer = document.createElement('div');
+            this.parent.appendChild(backButtonContainer);
+            const backButton = new BackButtonComponent(backButtonContainer);
+            backButton.render(this.goBack.bind(this));
+        }
     }
 
     goBack() {
